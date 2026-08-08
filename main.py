@@ -3,7 +3,7 @@ main.py
 
 Runs the pipeline end to end:
   1. Find a trending topic
-  2. Turn it into a video concept + full script (Gemini)
+  2. Turn it into a video concept + full script (Groq)
   3. Generate a voiceover
   4. Generate matching AI images
   5. Assemble a finished vertical video
@@ -25,7 +25,7 @@ from voice_gen import generate_voiceover, extract_visual_prompts
 from image_gen import generate_images_for_scenes
 from video_builder import build_video
 
-REQUIRED_ENV = ["GEMINI_API_KEY"]
+REQUIRED_ENV = ["GROQ_API_KEY"]
 OUTPUT_DIR = os.path.join(os.getcwd(), "output")
 
 
@@ -38,7 +38,7 @@ def check_env():
 
 def run_pipeline():
     check_env()
-    gemini_key = os.environ["GEMINI_API_KEY"]
+    groq_key = os.environ["GROQ_API_KEY"]
     work_dir = tempfile.mkdtemp(prefix="yt_agent_")
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     print(f"Working directory: {work_dir}")
@@ -49,7 +49,7 @@ def run_pipeline():
         print(f"  -> {trend['title']}")
 
         print("\n[2/5] Writing script...")
-        pkg = generate_full_package(gemini_key, trend["title"], trend.get("news_snippet", ""))
+        pkg = generate_full_package(groq_key, trend["title"], trend.get("news_snippet", ""))
         print(f"  -> Title: {pkg['video_title']}")
 
         print("\n[3/5] Generating voiceover...")
