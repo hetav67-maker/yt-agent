@@ -7,7 +7,7 @@ Runs the full pipeline end to end:
   3. Generate a voiceover
   4. Generate matching AI images
   5. Assemble a finished vertical video
-  6. Upload to YouTube as a Short (private by default)
+  6. Upload to Instagram as a Reel
 """
 
 import os
@@ -21,10 +21,10 @@ from script_writer import generate_full_package
 from voice_gen import generate_voiceover, extract_visual_prompts
 from image_gen import generate_images_for_scenes
 from video_builder import build_video
-from youtube_uploader import upload_short
+from instagram_uploader import upload_reel
 
 REQUIRED_ENV = [
-    "GEMINI_API_KEY", "YOUTUBE_CLIENT_ID", "YOUTUBE_CLIENT_SECRET", "YOUTUBE_REFRESH_TOKEN",
+    "GEMINI_API_KEY", "INSTAGRAM_USER_ID", "INSTAGRAM_ACCESS_TOKEN",
 ]
 
 
@@ -67,13 +67,10 @@ def run_pipeline():
         video_path = os.path.join(work_dir, "final_video.mp4")
         build_video(image_paths, voice_path, video_path, title_text=pkg["video_title"])
 
-        print("\n[6/6] Uploading to YouTube...")
-        video_id = upload_short(
-            video_path,
-            title=pkg["video_title"],
-            description=f"{pkg['angle']}\n\nTarget audience: {pkg['audience']}",
-        )
-        print(f"\nDone. https://youtube.com/shorts/{video_id}")
+        print("\n[6/6] Uploading to Instagram...")
+        caption = f"{pkg['video_title']}\n\n{pkg['angle']}\n\n#reels #shorts"
+        media_id = upload_reel(video_path, caption)
+        print(f"\nDone. Published Instagram media ID: {media_id}")
 
     except Exception:
         print("\n[PIPELINE FAILED]", file=sys.stderr)
