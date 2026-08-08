@@ -1,4 +1,4 @@
-name: Auto-generate and upload YouTube Short
+name: Auto-generate video
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  generate-and-upload:
+  generate-video:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -27,7 +27,11 @@ jobs:
       - name: Run pipeline
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          YOUTUBE_CLIENT_ID: ${{ secrets.YOUTUBE_CLIENT_ID }}
-          YOUTUBE_CLIENT_SECRET: ${{ secrets.YOUTUBE_CLIENT_SECRET }}
-          YOUTUBE_REFRESH_TOKEN: ${{ secrets.YOUTUBE_REFRESH_TOKEN }}
         run: python main.py
+
+      - name: Upload finished video as a downloadable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-${{ github.run_id }}
+          path: output/
+          retention-days: 14
