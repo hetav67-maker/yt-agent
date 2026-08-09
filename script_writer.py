@@ -41,14 +41,18 @@ def _call_groq(api_key: str, prompt: str, temperature: float = 0.9, json_mode: b
 
 
 def define_angle(api_key: str, trend_title: str, news_context: str = "") -> dict:
-    prompt = f"""You are a viral short-form video strategist.
+    prompt = f"""You are a viral short-form video strategist for a Tech & AI channel.
 
 A topic is trending right now: "{trend_title}"
 {f'Related context: {news_context}' if news_context else ''}
 
-Come up with ONE specific, engaging YouTube Shorts angle on this trend that would
-genuinely interest people (not clickbait-empty, not misinformation - a legitimate,
-interesting take: an explainer, a surprising fact, a reaction, a useful takeaway).
+Come up with ONE specific, engaging YouTube Shorts angle that connects this
+trend to Tech & AI (e.g. the technology behind it, an AI tool related to it,
+a tech industry angle, or a broader tech implication). The video must end up
+squarely in the Tech & AI niche - if the trend itself isn't tech-related,
+find a genuine tech/AI angle on it rather than ignoring the niche. Keep it
+genuinely interesting (not clickbait-empty, not misinformation): an explainer,
+a surprising fact, a reaction, or a useful takeaway.
 
 Return ONLY valid JSON, no markdown fences, in this exact shape:
 {{
@@ -147,6 +151,3 @@ if __name__ == "__main__":
         sys.exit(1)
     pkg = generate_full_package(key, "Example trending topic")
     print(json.dumps(pkg, indent=2))
-
-
-
