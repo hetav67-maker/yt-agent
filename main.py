@@ -76,9 +76,22 @@ def run_pipeline():
         with open(info_path, "w", encoding="utf-8") as f:
             json.dump(pkg, f, indent=2)
 
+        caption_path = os.path.join(OUTPUT_DIR, f"{timestamp}_{safe_title}_TITLE_AND_DESCRIPTION.txt")
+        description = (
+            f"{pkg['angle']}\n\n"
+            f"{'Follow for more Tech & AI in under a minute.'}\n\n"
+            f"#tech #ai #shorts #technology #artificialintelligence"
+        )
+        with open(caption_path, "w", encoding="utf-8") as f:
+            f.write("TITLE (copy-paste this):\n")
+            f.write(pkg["video_title"] + "\n\n")
+            f.write("DESCRIPTION (copy-paste this):\n")
+            f.write(description + "\n")
+
         print(f"\nDone. Video saved to: {video_path}")
         print(f"Script/metadata saved to: {info_path}")
-        print("Download it from the GitHub Actions run's 'Artifacts' section, then upload it yourself.")
+        print(f"Title/description saved to: {caption_path}")
+        print("Download it all from the GitHub Actions run's 'Artifacts' section, then upload it yourself.")
 
     except Exception:
         print("\n[PIPELINE FAILED]", file=sys.stderr)
