@@ -65,20 +65,30 @@ Return ONLY valid JSON, no markdown fences, in this exact shape:
     return json.loads(raw)
 
 
-def build_outline(api_key: str, video_title, angle, audience, tone, duration=50):
+def expand_script(api_key: str, video_title, audience, tone, duration, outline):
+    max_words = int(duration * 2.3)  # ~2.3 words/sec natural spoken pace, biased safe
     prompt = f"""You are a professional video scriptwriter.
 
-Create a beat-by-beat OUTLINE for a YouTube Shorts video.
+Using this outline, write the FULL script for a YouTube Shorts video.
 
 Title: {video_title}
-Angle: {angle}
 Audience: {audience}
 Tone: {tone}
 Target length: {duration} seconds
+HARD LIMIT: the total spoken words across the entire script must be under
+{max_words} words. This is a strict constraint, not a suggestion — if the
+outline has too much content, cut material rather than exceed the word
+limit. Going over will make the video too long.
 
-Numbered list of beats, each with timestamp range, what happens, and its purpose.
-First beat = hook in the first 2-3 seconds. Last beat = clear call to action.
-Return only the outline."""
+OUTLINE:
+{outline}
+
+For each beat write:
+[Timestamp]
+VISUAL: one-sentence description of what image/scene should show
+SCRIPT: the exact words to say, natural spoken language
+
+Return only the formatted script."""
     return _call_groq(api_key, prompt, temperature=0.9)
 
 
