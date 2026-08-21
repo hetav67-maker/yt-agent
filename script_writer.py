@@ -8,7 +8,7 @@ Given a raw trending topic, this:
   4. Polishes the script for hook strength and pacing
 
 Uses Groq's free, no-credit-card API (OpenAI-compatible endpoint) running
-Llama 3.3 70B. Returns a dict ready to hand to voice_gen.py / image_gen.py /
+openai/gpt-oss-120b. Returns a dict ready to hand to voice_gen.py / image_gen.py /
 video_builder.py.
 """
 
